@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>TapeDrop.Core</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TapeDrop.Ltfs\TapeDrop.Ltfs.csproj" />
+    <ProjectReference Include="..\TapeDrop.Catalog\TapeDrop.Catalog.csproj" />
+  </ItemGroup>
+</Project>

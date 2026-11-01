@@ -1,0 +1,42 @@
+<Page
+    x:Class="TapeDrop.Desktop.BackupsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Padding="32" RowSpacing="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Backup jobs" Style="{StaticResource TitleTextBlockStyle}" />
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="12">
+            <Button Content="New backup job" Click="New_Click" Style="{StaticResource AccentButtonStyle}" />
+            <Button x:Name="RunButton" Content="Run selected" Click="Run_Click" />
+            <Button x:Name="DeleteButton" Content="Delete selected" Click="Delete_Click" />
+            <Button x:Name="CancelButton" Content="Cancel" Click="Cancel_Click" Visibility="Collapsed" />
+        </StackPanel>
+
+        <Grid Grid.Row="2">
+            <ListView x:Name="JobsList" SelectionMode="Single">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Padding="0,10" Spacing="2">
+                            <TextBlock Text="{Binding Title}" FontWeight="SemiBold" />
+                            <TextBlock Text="{Binding Subtitle}" Opacity="0.7" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <TextBlock x:Name="EmptyText" Text="No backup jobs yet. Create one to save a source folder."
+                       HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.7" />
+        </Grid>
+
+        <StackPanel Grid.Row="3" Spacing="6">
+            <ProgressBar x:Name="JobProgress" Visibility="Collapsed" />
+            <TextBlock x:Name="StatusText" Opacity="0.8" />
+        </StackPanel>
+    </Grid>
+</Page>

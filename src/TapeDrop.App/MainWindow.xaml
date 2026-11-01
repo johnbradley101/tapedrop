@@ -1,0 +1,19 @@
+<Window
+    x:Class="TapeDrop.Desktop.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="TapeDrop">
+    <NavigationView
+        x:Name="Nav"
+        PaneDisplayMode="Left"
+        IsBackButtonVisible="Collapsed"
+        IsSettingsVisible="False"
+        SelectionChanged="Nav_SelectionChanged">
+        <NavigationView.MenuItems>
+            <NavigationViewItem Content="Copy" Tag="copy" Icon="Copy" />
+            <NavigationViewItem Content="Backups" Tag="backups" Icon="Sync" />
+            <NavigationViewItem Content="Catalog" Tag="catalog" Icon="Find" />
+        </NavigationView.MenuItems>
+        <Frame x:Name="ContentFrame" />
+    </NavigationView>
+</Window>
