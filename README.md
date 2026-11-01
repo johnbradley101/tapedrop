@@ -17,11 +17,11 @@ from tape to verify it.
 Not built yet: spanning one job across several tapes, restore from the app (copy files off the
 mounted tape in Explorer for now), incremental backups, encryption, autoloader support.
 
-## Status: not yet compiled
+## Status
 
-This code was written without access to a .NET SDK, so it has **not been compiled or run**.
-Expect to fix a few compile errors on first build. Start with the tests; they exercise the
-whole engine against a folder that stands in for a tape.
+The engine, catalog and tests build and pass on GitHub Actions (Windows runner), and the WinUI
+app compiles. Nothing has been run against a real tape drive yet, and the app screens have not
+been tried by hand.
 
 ## Build and test (Windows 11)
 
@@ -64,6 +64,27 @@ Things to check on the real machine (Step 0 of the plan):
   (about 360 MB/s for LTO-8, 400 MB/s for LTO-9) or the drive will keep stopping and
   repositioning. Many small files are also slow over LTFS.
 
+## Probe tool: check a machine before using a real tape
+
+`tapedrop-probe.exe` is a small console program. GitHub Actions builds it as a self-contained
+exe (no .NET install needed): open the repo's **Actions** tab, open the latest run, and download
+the **tapedrop-probe** artifact.
+
+    tapedrop-probe.exe                       scan the machine (read-only), save a report
+    tapedrop-probe.exe read-test  --source E:\Photos --gb 2
+    tapedrop-probe.exe copy-test  --source E:\Photos --target L:\ --gb 2 --verify
+
+- **scan** looks for the IBM LTFS software, the tape drive (and whether Windows sees it twice,
+  which usually means two Fibre Channel paths), Fibre Channel controllers and mounted volumes.
+  It changes nothing.
+- **read-test** reads and hashes files from the USB RAID, as a real job does. Writes nothing.
+- **copy-test** writes test data to the target using the real copy engine and reports speed per
+  5-second window. It asks you to type YES first. **Use a spare tape:** on LTFS, space used by
+  test files is not given back when they are deleted.
+
+Each command saves a `tapedrop-probe-*.txt` report in the current folder; send it back.
+The tape needs about 160 MB/s sustained (LTO-6 native). Slower and the drive keeps stopping.
+
 ## Recovering a tape without this app
 
 Each job writes plain files plus a manifest in the tape's `_tapedrop` folder.
@@ -82,6 +103,7 @@ Always unmount a tape cleanly before removing it; that is what writes the LTFS i
     src/TapeDrop.Catalog   SQLite catalog and saved backup jobs
     src/TapeDrop.Core      planner, copy engine, verifier, manifests, job runners
     src/TapeDrop.App       WinUI 3 app (Copy, Backups, Catalog pages)
+    src/TapeDrop.Probe     hardware check and speed-test console tool
     tests/TapeDrop.Tests   xUnit tests (no hardware needed)
 
 ## Notes on choices that differ from the first plan

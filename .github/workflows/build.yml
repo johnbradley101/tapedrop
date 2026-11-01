@@ -32,3 +32,18 @@ jobs:
           dotnet-version: 8.0.x
       - name: Build app
         run: dotnet build src/TapeDrop.App -c Release -p:Platform=x64
+
+  probe:
+    name: Publish probe tool
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Publish self-contained probe exe
+        run: dotnet publish src/TapeDrop.Probe -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o probe-out
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tapedrop-probe
+          path: probe-out/tapedrop-probe.exe
